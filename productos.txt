@@ -1,0 +1,1 @@
+[{"title":"Yerba CBC","description":"Yerba CBC en su empaque de 500gr","price":752,"thumbnail":"wwww.CBC.com","code":"YCBC","stock":500,"id":1}]
