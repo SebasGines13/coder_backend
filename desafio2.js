@@ -1,5 +1,7 @@
 import { promises as fs } from "fs";
 
+const UNICODE = "utf-8";
+
 class ProductManager {
   constructor(path) {
     this.products = [];
@@ -7,12 +9,12 @@ class ProductManager {
   }
 
   getProducts = async () => {
-    const products = JSON.parse(await fs.readFile(this.path, "utf-8"));
+    const products = JSON.parse(await fs.readFile(this.path, UNICODE));
     console.log(products);
   };
 
   getProductById = async (id) => {
-    const products = JSON.parse(await fs.readFile(this.path, "utf-8"));
+    const products = JSON.parse(await fs.readFile(this.path, UNICODE));
     const prod = products.find((producto) => producto.id === id);
     if (prod) {
       console.log(prod);
@@ -23,7 +25,7 @@ class ProductManager {
 
   addProduct = async (product) => {
     //Consulto el txt y lo parseo
-    const products = JSON.parse(await fs.readFile(this.path, "utf-8"));
+    const products = JSON.parse(await fs.readFile(this.path, UNICODE));
     //Consulto si mi producto ya existe en el txt
     if (products.find((producto) => producto.id == product.id)) {
       return "Producto ya agregado";
@@ -35,7 +37,7 @@ class ProductManager {
   };
 
   updateProduct = async (id, product) => {
-    const products = JSON.parse(await fs.readFile(this.path, "utf-8"));
+    const products = JSON.parse(await fs.readFile(this.path, UNICODE));
     const indice = products.findIndex((prod) => prod.id === id);
 
     if (indice != -1) {
@@ -50,7 +52,7 @@ class ProductManager {
   };
 
   deleteProduct = async (id) => {
-    const products = JSON.parse(await fs.readFile(this.path, "utf-8"));
+    const products = JSON.parse(await fs.readFile(this.path, UNICODE));
     const prods = products.filter((prod) => prod.id != id);
     await fs.writeFile(this.path, JSON.stringify(prods));
   };
@@ -120,9 +122,9 @@ const productManager = new ProductManager("./productos.txt");
 
 //productManager.addProduct(product1);
 //productManager.addProduct(product2);
-//productManager.getProductById(1);
+//productManager.getProductById(3);
 //productManager.getProductById(2);
 //productManager.getProductById(3);
-productManager.updateProduct(1, productUpdate);
+//productManager.updateProduct(1, productUpdate);
 //productManager.deleteProduct(1);
 productManager.getProducts();
