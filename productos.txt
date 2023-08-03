@@ -1,1 +1,1 @@
-[]
+[{"title":"Yerba Playadito","description":"Yerba Playadito en su empaque de 1kg","price":800,"thumbnail":"wwww.Y1234.com","code":"Y1234","stock":250,"id":2},{"title":"Yerba CBC2","description":"Yerba CBC2 en su empaque de 500gr","price":752,"thumbnail":"wwww.CBC.com","code":"YCBC","stock":500,"id":3}]

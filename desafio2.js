@@ -8,6 +8,17 @@ class ProductManager {
     this.path = path;
   }
 
+  // Método de clase
+  static nextId() {
+    if (this.idIncrement) {
+      // Atributo de la clase.
+      this.idIncrement++;
+    } else {
+      this.idIncrement = 1;
+    }
+    return this.idIncrement;
+  }
+
   getProducts = async () => {
     const products = JSON.parse(await fs.readFile(this.path, UNICODE));
     console.log(products);
@@ -27,7 +38,7 @@ class ProductManager {
     //Consulto el txt y lo parseo
     const products = JSON.parse(await fs.readFile(this.path, UNICODE));
     //Consulto si mi producto ya existe en el txt
-    if (products.find((producto) => producto.id == product.id)) {
+    if (products.find((producto) => producto.id === product.id)) {
       return "Producto ya agregado";
     }
     //Lo agrego al array al ya saber que no existe
@@ -58,73 +69,54 @@ class ProductManager {
   };
 }
 
-class Product {
-  constructor(title, description, price, thumbnail, code, stock) {
-    this.title = title;
-    this.description = description;
-    this.price = price;
-    this.thumbnail = thumbnail;
-    this.code = code;
-    this.stock = stock;
-    this.id = Product.nextId();
-  }
-
-  // Método de clase
-  static nextId() {
-    if (this.idIncrement) {
-      // Atributo de la clase.
-      this.idIncrement++;
-    } else {
-      this.idIncrement = 1;
-    }
-    return this.idIncrement;
-  }
-}
-
-class ProductUpdate {
-  constructor(title, description, price, thumbnail, code, stock) {
-    this.title = title;
-    this.description = description;
-    this.price = price;
-    this.thumbnail = thumbnail;
-    this.code = code;
-    this.stock = stock;
-  }
-}
-
-const product1 = new Product(
-  "Cafe la Morenita",
-  "Cafe la Morenita en su empaque de 2kg.",
-  1998,
-  "wwww.C1234.com",
-  "C1234",
-  100
-);
-const product2 = new Product(
-  "Yerba Playadito",
-  "Yerba Playadito en su empaque de 1kg",
-  800,
-  "wwww.Y1234.com",
-  "Y1234",
-  250
-);
-
-const productUpdate = new ProductUpdate(
-  "Yerba CBC",
-  "Yerba CBC en su empaque de 500gr",
-  752,
-  "wwww.CBC.com",
-  "YCBC",
-  500
-);
-
 const productManager = new ProductManager("./productos.txt");
 
-//productManager.addProduct(product1);
-//productManager.addProduct(product2);
-//productManager.getProductById(3);
-//productManager.getProductById(2);
-//productManager.getProductById(3);
-//productManager.updateProduct(1, productUpdate);
-//productManager.deleteProduct(1);
-productManager.getProducts();
+const product1 = {
+  title: "Cafe la Morenita",
+  description: "Cafe la Morenita en su empaque de 2kg.",
+  price: 1998,
+  thumbnail: "wwww.C1234.com",
+  code: "C1234",
+  stock: 100,
+  id: ProductManager.nextId(),
+};
+
+const product2 = {
+  title: "Yerba Playadito",
+  description: "Yerba Playadito en su empaque de 1kg",
+  price: 800,
+  thumbnail: "wwww.Y1234.com",
+  code: "Y1234",
+  stock: 250,
+  id: ProductManager.nextId(),
+};
+
+const product3 = {
+  title: "Azucar",
+  description: "Azucar en su empaque de 1kg",
+  price: 450,
+  thumbnail: "wwww.A332.com",
+  code: "A332",
+  stock: 500,
+  id: ProductManager.nextId(),
+};
+
+const productUpdate = {
+  title: "Yerba CBC2",
+  description: "Yerba CBC2 en su empaque de 500gr",
+  price: 752,
+  thumbnail: "wwww.CBC.com",
+  code: "YCBC",
+  stock: 500,
+};
+
+await productManager.addProduct(product1);
+await productManager.addProduct(product2);
+await productManager.addProduct(product3);
+await productManager.getProductById(1);
+await productManager.getProductById(2);
+await productManager.getProductById(3);
+await productManager.getProductById(4);
+await productManager.updateProduct(3, productUpdate);
+await productManager.deleteProduct(1);
+await productManager.getProducts();
