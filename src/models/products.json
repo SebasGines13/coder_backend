@@ -1,0 +1,152 @@
+[
+  {
+    "title": "Azucar",
+    "description": "Azucar en su empaque de 1kg",
+    "price": 450,
+    "thumbnail": "https://www.example.com/A332.jpg",
+    "code": "A332",
+    "stock": 500,
+    "category": "comestible",
+    "id": "d6f86486-45c7-4acb-bd64-e931b2301045"
+  },
+  {
+    "title": "Harina",
+    "description": "Harina para repostería en paquete de 2kg",
+    "price": 320,
+    "thumbnail": "https://www.example.com/B123.jpg",
+    "code": "B123",
+    "stock": 750,
+    "category": "comestible",
+    "id": "23bf17eb-d35b-4d69-b767-72763ee09578"
+  },
+  {
+    "title": "Aceite de Oliva",
+    "description": "Aceite de oliva virgen extra en botella de 500ml",
+    "price": 650,
+    "thumbnail": "https://www.example.com/C456.jpg",
+    "code": "C456",
+    "stock": 300,
+    "category": "comestible",
+    "id": "7c6a5574-3a6f-4f57-8e2d-48992e67eefa"
+  },
+  {
+    "title": "Arroz",
+    "description": "Arroz blanco en paquete de 5kg",
+    "price": 280,
+    "thumbnail": "https://www.example.com/D789.jpg",
+    "code": "D789",
+    "stock": 600,
+    "category": "comestible",
+    "id": "d0a27b46-6f74-4eaa-9b04-82d8fb3fe870"
+  },
+  {
+    "title": "Leche",
+    "description": "Leche fresca en envase de 1 litro",
+    "price": 120,
+    "thumbnail": "https://www.example.com/E234.jpg",
+    "code": "E234",
+    "stock": 800,
+    "category": "comestible",
+    "id": "f49e7929-7a99-472c-9771-7de72e953cf1"
+  },
+  {
+    "title": "Chocolate",
+    "description": "Tableta de chocolate negro 70% cacao",
+    "price": 180,
+    "thumbnail": "https://www.example.com/F567.jpg",
+    "code": "F567",
+    "stock": 400,
+    "category": "comestible",
+    "id": "5da71a10-866b-4ee6-9fa0-726e34a9b7f6"
+  },
+  {
+    "title": "Café",
+    "description": "Café molido de origen colombiano, 250g",
+    "price": 550,
+    "thumbnail": "https://www.example.com/G890.jpg",
+    "code": "G890",
+    "stock": 250,
+    "category": "comestible",
+    "id": "1d8b7ca3-3ee0-4b17-8c9b-d88b3f2fe3aa"
+  },
+  {
+    "title": "Manzanas",
+    "description": "Manzanas frescas, paquete de 6 unidades",
+    "price": 300,
+    "thumbnail": "https://www.example.com/H123.jpg",
+    "code": "H123",
+    "stock": 900,
+    "category": "frutas",
+    "id": "7f8b65d1-8d89-47e3-8c2d-24ad1ed8c64d"
+  },
+  {
+    "title": "Pasta",
+    "description": "Pasta italiana de espaguetis, 500g",
+    "price": 220,
+    "thumbnail": "https://www.example.com/I456.jpg",
+    "code": "I456",
+    "stock": 350,
+    "category": "comestible",
+    "id": "03c3cb31-af2e-45ce-befa-0ab0cf99f1f4"
+  },
+  {
+    "title": "Huevos",
+    "description": "Huevos frescos de granja, docena",
+    "price": 180,
+    "thumbnail": "https://www.example.com/J789.jpg",
+    "code": "J789",
+    "stock": 150,
+    "category": "comestible",
+    "id": "b37c8f5b-524f-488f-82db-8ec48da1f73c"
+  },
+  {
+    "title": "Queso",
+    "description": "Queso cheddar en bloque de 250g",
+    "price": 320,
+    "thumbnail": "https://www.example.com/K234.jpg",
+    "code": "K234",
+    "stock": 280,
+    "category": "comestible",
+    "id": "4a6a717d-d1e5-4a8c-bf97-e7bdcde4c95f"
+  },
+  {
+    "title": "Pan",
+    "description": "Pan integral recién horneado, unidad",
+    "price": 60,
+    "thumbnail": "https://www.example.com/L567.jpg",
+    "code": "L567",
+    "stock": 600,
+    "category": "comestible",
+    "id": "5e18ed1d-d2f6-4e8b-858c-9c92e8e26a9c"
+  },
+  {
+    "title": "Agua Mineral",
+    "description": "Botella de agua mineral natural, 500ml",
+    "price": 50,
+    "thumbnail": "https://www.example.com/M890.jpg",
+    "code": "M890",
+    "stock": 1000,
+    "category": "bebidas",
+    "id": "9887e1c9-41b6-4ccf-a382-93bbd4c03e1b"
+  },
+  {
+    "title": "Mantequilla",
+    "description": "Mantequilla de origen orgánico, 200g",
+    "price": 240,
+    "thumbnail": "https://www.example.com/N123.jpg",
+    "code": "N123",
+    "stock": 420,
+    "category": "comestible",
+    "id": "28b700a5-cf13-40a2-97c9-856e59db82f2"
+  },
+  {
+    "title": "Tomates",
+    "description": "Tomates frescos, paquete de 4 unidades",
+    "price": 184,
+    "thumbnail": "https://www.example.com/O456.jpg",
+    "code": "O456",
+    "stock": 700,
+    "category": "verduras",
+    "id": "5a9130cf-7bc7-45f6-93cc-1d03a80a7180"
+  }
+]
