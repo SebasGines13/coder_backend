@@ -3,7 +3,6 @@ const socket = io();
 const productRows = document.querySelector("#productRows");
 
 socket.on("listProducts", (products) => {
-  console.log("Estoy dentro del socket ON de products en realTimeProduct.js");
   productRows.innerHTML = "";
   products.forEach((product) => {
     productRows.innerHTML += `

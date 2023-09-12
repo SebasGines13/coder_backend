@@ -1,28 +1,42 @@
 import { Router } from "express";
-import { CartManager } from "../controllers/cartManager.js";
+import cartModel from "../models/carts.models.js";
 
-const cartManager = new CartManager("src/models/carts.json");
-const routerCart = Router();
+const cartRouter = Router();
 
-routerCart.post("/", async (req, res) => {
-  const cart = await cartManager.addCart();
-  res.status(200).send(cart);
-});
-
-routerCart.get("/:cid", async (req, res) => {
+cartRouter.get("/:cid", async (req, res) => {
   const { cid } = req.params;
-  const cart = await cartManager.getCartById(cid);
-  cart
-    ? res.status(200).send(cart.products)
-    : res.status(404).send("Carrito no existente");
+  try {
+    const cart = await cartModel.findById(cid);
+    cart
+      ? res.status(200).send(cart.products)
+      : res.status(404).send("Carrito no existente");
+  } catch (error) {
+    res.status(400).send({ error: `Error al consultar carrito: ${error}` });
+  }
 });
 
-routerCart.post("/:cid/product/:pid", async (req, res) => {
+cartRouter.post("/", async (req, res) => {
+  try {
+    const resultado = await cartModel.create({});
+    res.status(200).send(resultado);
+  } catch (error) {
+    res.status(400).send({ error: `Error al crear carrito: ${error}` });
+  }
+});
+
+cartRouter.post("/:cid/product/:pid", async (req, res) => {
   const { cid, pid } = req.params;
-  const cart = await cartManager.addProduct(cid, pid);
-  cart
-    ? res.status(200).send(cart)
-    : res.status(404).send("Carrito no existente");
+  const { quantity } = req.body;
+  try {
+    const cart = await cartModel.findById(cid);
+    if (cart) {
+      cart.products.push({ id_prod: pid, quantity: quantity });
+      const respuesta = await cartModel.findByIdAndUpdate(cid, cart); // Actualizo el carrito de mi base de datos con el nuevo producto
+      res.status(200).send({ respuesta: "Ok", mensaje: respuesta });
+    }
+  } catch (e) {
+    res.status(400).send({ error: `Error al actualizar carrito: ${error}` });
+  }
 });
 
-export default routerCart;
+export default cartRouter;

@@ -3,18 +3,33 @@ import { engine } from "express-handlebars";
 import { Server } from "socket.io";
 import routerProd from "./routes/products.routes.js";
 import cartProd from "./routes/carts.routes.js";
+import messageProd from "./routes/messages.routes.js";
+import mongoose from "mongoose";
 import { __dirname } from "./path.js";
-import { ProductManager } from "./controllers/productManager.js";
+import productModel from "./models/products.models.js";
+import messageModel from "./models/messages.models.js";
 import path from "path";
+import dotenv from "dotenv";
+
+// Carga las variables de entorno desde .env
+dotenv.config();
 
 // Constantes
 const PORT = 8080;
 const HOME = "home";
 const SOCKETGETPRODUCTS = "realTimeProducts";
 const SOCKETADDPRODUCT = "newProduct";
+const CHAT = "chat";
 
 const app = express();
-const productManager = new ProductManager("src/models/products.json");
+
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(async () => {
+    console.log("DB conectada");
+  })
+
+  .catch((error) => console.log("Error en conexión a MongoDB Atlas: ", error));
 
 //Server
 const server = app.listen(PORT, () => {
@@ -35,9 +50,19 @@ app.set("views", path.resolve(__dirname, "./views"));
 io.on("connection", (socket) => {
   console.log("Conexión con socket.io");
   socket.on("addProduct", async (prod) => {
-    await productManager.addProduct(prod);
-    const products = await productManager.getProducts();
+    await productModel.addProduct(prod);
+    const products = await productModel.find();
     io.emit("listProducts", products);
+  });
+  socket.on("addMessage", async (info) => {
+    const { email, message } = info;
+    await messageModel.create({
+      email,
+      message,
+    });
+    const messages = await messageModel.find();
+    console.log(messages);
+    io.emit("messages", messages);
   });
 });
 
@@ -45,6 +70,7 @@ io.on("connection", (socket) => {
 app.use("/static", express.static(path.join(__dirname, "/public"))); //path.join() es una concatenacion de una manera mas optima que con el +
 app.use("/api/product", routerProd);
 app.use("/api/cart", cartProd);
+app.use("/api/messages", messageProd);
 
 //HBS
 app.get("/static/" + HOME, async (req, res) => {
@@ -68,5 +94,12 @@ app.get("/static/" + SOCKETADDPRODUCT, async (req, res) => {
   res.render(SOCKETADDPRODUCT, {
     rutaCSS: SOCKETADDPRODUCT,
     rutaJS: SOCKETADDPRODUCT,
+  });
+});
+
+app.get("/static/" + CHAT, (req, res) => {
+  res.render(CHAT, {
+    rutaCSS: CHAT,
+    rutaJS: CHAT,
   });
 });
