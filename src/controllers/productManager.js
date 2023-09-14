@@ -44,9 +44,6 @@ export class ProductManager {
   async updateProduct(id, product) {
     await this.loadFromFile();
     const indice = this.products.findIndex((prod) => prod.id === id);
-    console.log(indice);
-    console.log(this.products);
-
     if (indice != -1) {
       //Mediante el indice modifico todos los atributos de mi objeto
       this.products[indice] = product;

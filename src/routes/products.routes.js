@@ -4,10 +4,40 @@ import productModel from "../models/products.models.js";
 const productRouter = Router();
 
 productRouter.get("/", async (req, res) => {
+  const { limit, page, sort, category, status } = req.query;
+  let sortOption;
+  sort == "asc" && (sortOption = "price");
+  sort == "desc" && (sortOption = "-price");
+
+  const options = {
+    limit: limit || 10,
+    page: page || 1,
+    sort: sortOption || null,
+  };
+
+  const query = {};
+  category && (query.category = category);
+  status && (query.status = status);
+
   try {
-    const { limit } = req.query;
-    const prods = await productModel.find().limit(limit);
-    res.status(200).send({ resultado: "OK", message: prods });
+    const prods = await productModel.paginate(query, options);
+    const response = {
+      status: "success",
+      payload: prods.docs,
+      totalPages: prods.totalPages,
+      prevPage: prods.prevPage,
+      nextPage: prods.nextPage,
+      page: prods.page,
+      hasPrevPage: prods.hasPrevPage,
+      hasNextPage: prods.hasNextPage,
+      prevLink: prods.hasPrevPage
+        ? `/api/products?page=${prods.prevPage}`
+        : null,
+      nextLink: prods.hasNextPage
+        ? `/api/products?page=${prods.nextPage}`
+        : null,
+    };
+    res.status(200).send({ resultado: "OK", message: response });
   } catch (error) {
     res.status(400).send({ error: `Error al consultar productos: ${error}` });
   }

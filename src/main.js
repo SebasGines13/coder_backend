@@ -41,7 +41,6 @@ const io = new Server(server);
 //Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); //URL extensas
-
 app.engine("handlebars", engine()); //Defino que voy a trabajar con hbs y guardo la config
 app.set("view engine", "handlebars");
 app.set("views", path.resolve(__dirname, "./views"));
@@ -61,15 +60,14 @@ io.on("connection", (socket) => {
       message,
     });
     const messages = await messageModel.find();
-    console.log(messages);
     io.emit("messages", messages);
   });
 });
 
 //Routes
 app.use("/static", express.static(path.join(__dirname, "/public"))); //path.join() es una concatenacion de una manera mas optima que con el +
-app.use("/api/product", routerProd);
-app.use("/api/cart", cartProd);
+app.use("/api/products", routerProd);
+app.use("/api/carts", cartProd);
 app.use("/api/messages", messageProd);
 
 //HBS
