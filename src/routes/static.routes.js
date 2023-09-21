@@ -1,0 +1,42 @@
+import { Router } from "express";
+import productModel from "../models/products.models.js";
+
+const HOME = "home";
+const SOCKETGETPRODUCTS = "realTimeProducts";
+const SOCKETADDPRODUCT = "newProduct";
+const CHAT = "chat";
+
+const staticRouter = Router();
+
+staticRouter.get("/" + HOME, async (req, res) => {
+  const productos = await productModel.find();
+  res.render(HOME, {
+    rutaCSS: HOME,
+    productos: productos,
+  });
+});
+
+staticRouter.get("/" + SOCKETGETPRODUCTS, async (req, res) => {
+  const productos = await productModel.find();
+  res.render(SOCKETGETPRODUCTS, {
+    rutaCSS: SOCKETGETPRODUCTS,
+    rutaJS: SOCKETGETPRODUCTS,
+    productos: productos,
+  });
+});
+
+staticRouter.get("/" + SOCKETADDPRODUCT, async (req, res) => {
+  res.render(SOCKETADDPRODUCT, {
+    rutaCSS: SOCKETADDPRODUCT,
+    rutaJS: SOCKETADDPRODUCT,
+  });
+});
+
+staticRouter.get("/" + CHAT, (req, res) => {
+  res.render(CHAT, {
+    rutaCSS: CHAT,
+    rutaJS: CHAT,
+  });
+});
+
+export default staticRouter;
