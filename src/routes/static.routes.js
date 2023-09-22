@@ -10,18 +10,20 @@ const staticRouter = Router();
 
 staticRouter.get("/" + HOME, async (req, res) => {
   const productos = await productModel.find();
+  const productsList = productos.map((item) => item.toObject());
   res.render(HOME, {
     rutaCSS: HOME,
-    productos: productos,
+    productos: productsList,
   });
 });
 
 staticRouter.get("/" + SOCKETGETPRODUCTS, async (req, res) => {
   const productos = await productModel.find();
+  const productsList = productos.map((item) => item.toObject());
   res.render(SOCKETGETPRODUCTS, {
     rutaCSS: SOCKETGETPRODUCTS,
     rutaJS: SOCKETGETPRODUCTS,
-    productos: productos,
+    productos: productsList,
   });
 });
 
