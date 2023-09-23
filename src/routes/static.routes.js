@@ -13,7 +13,9 @@ staticRouter.get("/" + HOME, async (req, res) => {
   const productsList = productos.map((item) => item.toObject());
   res.render(HOME, {
     rutaCSS: HOME,
+    rutaJS: HOME,
     productos: productsList,
+    user: req.session.user,
   });
 });
 

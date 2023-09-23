@@ -17,11 +17,22 @@ sessionRouter.post("/login", async (req, res) => {
           name: `${user.first_name} ${user.last_name}`,
           email: user.email,
           age: user.age,
+          rol: user.rol,
         };
         res.status(200).send({ resultado: "Login válido", message: user });
       } else {
         res.status(401).send({ resultado: "Unauthorized", message: user });
       }
+    } else if (
+      email == process.env.ADMIN_EMAIL &&
+      password == process.env.ADMIN_PASSWORD
+    ) {
+      // Login
+      req.session.user = {
+        name: email,
+        rol: "Admin",
+      };
+      res.status(200).send({ resultado: "Login válido", message: user });
     } else {
       res.status(404).send({ resultado: "Not found", message: user });
     }
@@ -48,7 +59,13 @@ sessionRouter.post("/register", async (req, res) => {
       last_name: last_name,
       age: age,
     });
-    res.send(200).send({ respuesta_: "Usuario creado", respuesta: response });
+    req.session.user = {
+      name: `${response.first_name} ${response.last_name}`,
+      email: response.email,
+      age: response.age,
+      rol: response.rol,
+    };
+    res.status(200).send({ respuesta_: "Usuario creado", respuesta: response });
   } catch (e) {
     res.status(400).send({ error: `Error en crear usuario: ${e}` });
   }
