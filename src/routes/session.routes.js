@@ -1,74 +1,67 @@
 import { Router } from "express";
-import userModel from "../models/users.models.js";
-import { createHash, validatePassword } from "../utils/bcrypt.js";
+import passport from "passport";
 
 const sessionRouter = Router();
 
-sessionRouter.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    if (req.session.user)
-      res.status(200).send({ resultado: "Login ya existente", message: email });
-    const user = await userModel.findOne({ email: email });
-    if (user) {
-      if (validatePassword(password, user.password)) {
-        // Login
-        req.session.user = {
-          name: `${user.first_name} ${user.last_name}`,
-          email: user.email,
-          age: user.age,
-          rol: user.rol,
-        };
-        res.status(200).send({ resultado: "Login válido", message: user });
-      } else {
-        res.status(401).send({ resultado: "Unauthorized", message: user });
+sessionRouter.post(
+  "/login",
+  passport.authenticate("login"),
+  async (req, res) => {
+    try {
+      if (!req.user) {
+        return res.status(401).send({ mensaje: "Invalidate user" });
       }
-    } else if (
-      email == process.env.ADMIN_EMAIL &&
-      password == process.env.ADMIN_PASSWORD
-    ) {
-      // Login
       req.session.user = {
-        name: email,
-        rol: "Admin",
+        first_name: req.user.first_name,
+        last_name: req.user.last_name,
+        age: req.user.age,
+        email: req.user.email,
+        rol: req.user.rol,
       };
-      res.status(200).send({ resultado: "Login válido", message: user });
-    } else {
-      res.status(404).send({ resultado: "Not found", message: user });
+      res.status(200).send({ payload: req.user });
+    } catch (error) {
+      res.status(500).send({ mensaje: `Error al iniciar sesion ${error}` });
     }
-  } catch (e) {
-    res.status(400).send({ error: `Error en login: ${e}` });
   }
-});
+);
+
+sessionRouter.get(
+  "/github",
+  passport.authenticate("github", { scope: ["user:email"] }),
+  async (req, res) => {
+    res.status(200).send({ mensaje: "Usuario creado" });
+  }
+);
+
+sessionRouter.get(
+  "/githubSession",
+  passport.authenticate("github"),
+  async (req, res) => {
+    req.session.user = req.user;
+    res.status(200).send({ mensaje: "Session creada" });
+  }
+);
 
 sessionRouter.get("/logout", (req, res) => {
-  if (req.session.user) {
+  if (req.session) {
     req.session.destroy();
   }
   res.status(200).send({ resultado: "Login eliminado" });
 });
 
-sessionRouter.post("/register", async (req, res) => {
-  const { first_name, last_name, email, password, age } = req.body;
-  try {
-    const hashPassword = createHash(password);
-    const response = await userModel.create({
-      email: email,
-      password: hashPassword,
-      first_name: first_name,
-      last_name: last_name,
-      age: age,
-    });
-    req.session.user = {
-      name: `${response.first_name} ${response.last_name}`,
-      email: response.email,
-      age: response.age,
-      rol: response.rol,
-    };
-    res.status(200).send({ respuesta_: "Usuario creado", respuesta: response });
-  } catch (e) {
-    res.status(400).send({ error: `Error en crear usuario: ${e}` });
+sessionRouter.post(
+  "/register",
+  passport.authenticate("register"),
+  async (req, res) => {
+    try {
+      if (!req.user) {
+        return res.status(400).send({ mensaje: "Usuario ya existente" });
+      }
+      return res.status(200).send({ mensaje: "Usuario creado" });
+    } catch (error) {
+      res.status(500).send({ mensaje: `Error al crear usuario ${error}` });
+    }
   }
-});
+);
 
 export default sessionRouter;

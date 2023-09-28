@@ -7,6 +7,8 @@ import "dotenv/config";
 import { __dirname } from "../path.js";
 import path from "path";
 import { engine } from "express-handlebars";
+import initializePassport from "./passport.js";
+import passport from "passport";
 
 // Constantes
 const PORT = 8080;
@@ -45,5 +47,8 @@ app.use(
     saveUninitialized: false,
   })
 );
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 export const io = new Server(server);
