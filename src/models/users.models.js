@@ -12,8 +12,8 @@ const userSchema = new Schema({
   email: {
     type: String,
     required: true,
-    unique: true,
     index: true,
+    unique: true,
   },
   password: {
     type: String,
@@ -29,5 +29,4 @@ const userSchema = new Schema({
   },
 });
 
-const userModel = model("users", userSchema);
-export default userModel;
+export const userModel = model("users", userSchema);

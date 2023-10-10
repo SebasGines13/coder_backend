@@ -11,14 +11,14 @@ import initializePassport from "./passport.js";
 import passport from "passport";
 
 // Constantes
-const PORT = 8080;
+const PORT = 4000;
 
 // App
 export const app = express();
 
 // Conexión a BD
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(process.env.MONGO_URL)
   .then(async () => {
     console.log("DB conectada");
   })
@@ -38,7 +38,7 @@ app.set("views", path.resolve(__dirname, "./views"));
 app.use(
   session({
     store: MongoStore.create({
-      mongoUrl: process.env.MONGO_URI,
+      mongoUrl: process.env.MONGO_URL,
       mongoOptions: { UseNewUrlParser: true, useUnifiedTopology: true },
       ttl: 5, // segundos
     }),
