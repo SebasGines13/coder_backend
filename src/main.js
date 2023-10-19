@@ -1,15 +1,12 @@
 import express from "express";
-import routerProd from "./routes/products.routes.js";
-import cartProd from "./routes/carts.routes.js";
 import staticRouter from "./routes/static.routes.js";
-import sessionRouter from "./routes/session.routes.js";
-import messageProd from "./routes/messages.routes.js";
 import { __dirname } from "./path.js";
 import path from "path";
 import productModel from "./models/products.models.js";
 import messageModel from "./models/messages.models.js";
 import { app, io } from "./config/config.js";
-import viewsRouter from "./routes/views.routes.js";
+import usersRouter from "./routes/users.routes.js";
+import router from "./routes/index.routes.js";
 
 // Conexion de Socket.io
 io.on("connection", (socket) => {
@@ -36,8 +33,5 @@ app.use(
   staticRouter,
   express.static(path.join(__dirname, "/public"))
 );
-app.use("/api/products", routerProd);
-app.use("/api/carts", cartProd);
-app.use("/api/messages", messageProd);
-app.use("/api/sessions", sessionRouter);
-app.use("/", viewsRouter, express.static(__dirname + "/public"));
+app.use("/", usersRouter, express.static(__dirname + "/public"));
+app.use("/", router);
