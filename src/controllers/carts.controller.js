@@ -1,4 +1,9 @@
 import cartModel from "../models/carts.models.js";
+import productModel from "../models/products.models.js";
+import userModel from "../models/users.models.js";
+import "dotenv/config";
+
+const REDIRECTPURCHASE = `http://localhost:${process.env.PORT}/api/tickets`;
 
 const getCart = async (req, res) => {
   const { cid } = req.params;
@@ -133,6 +138,39 @@ const deleteProductFromCart = async (req, res) => {
   }
 };
 
+const purchaseCart = async (req, res) => {
+  const { cid } = req.params;
+  try {
+    const cart = await cartModel.findById(cid);
+    const products = await productModel.find();
+
+    if (cart) {
+      const user = await userModel.find({ cart: cart._id });
+      const email = user[0].email;
+      let amount = 0;
+      const purchaseItems = [];
+      cart.products.forEach(async (item) => {
+        const product = products.find(
+          (prod) => prod._id == item.id_prod.toString()
+        );
+        if (product.stock >= item.quantity) {
+          amount += product.price * item.quantity;
+          product.stock -= item.quantity;
+          await product.save();
+          purchaseItems.push(product.title);
+        }
+      });
+      console.log(purchaseItems);
+      await cartModel.findByIdAndUpdate(cid, { products: [] }); // Limpio el carrito
+      res.redirect(`${REDIRECTPURCHASE}?amount=${amount}&email=${email}`); // Creo el ticket
+    } else {
+      res.status(404).send({ resultado: "Not Found", message: cart });
+    }
+  } catch (error) {
+    res.status(400).send({ error: `Error al consultar carrito: ${error}` });
+  }
+};
+
 const cartsController = {
   getCart,
   postCart,
@@ -141,6 +179,7 @@ const cartsController = {
   putQuantity,
   deleteCart,
   deleteProductFromCart,
+  purchaseCart,
 };
 
 export default cartsController;

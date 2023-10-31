@@ -1,5 +1,4 @@
 import passport from "passport";
-
 export const passportError = (strategy) => {
   return async (req, res, next) => {
     passport.authenticate(strategy, (error, user, info) => {
@@ -24,13 +23,11 @@ export const authorization = (rol) => {
     if (!req.user) {
       return res.status(401).send({ error: "User no autorizado" });
     }
-
     if (req.user.user.rol != rol) {
       return res
         .status(403)
         .send({ error: "User no tiene los privilegios necesarios" });
     }
-
     next();
   };
 };

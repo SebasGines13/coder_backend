@@ -11,7 +11,7 @@ import initializePassport from "./passport.js";
 import passport from "passport";
 
 // Constantes
-const PORT = 4000;
+const PORT = process.env.PORT;
 
 // App
 export const app = express();
