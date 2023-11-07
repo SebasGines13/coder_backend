@@ -9,6 +9,7 @@ import path from "path";
 import { engine } from "express-handlebars";
 import initializePassport from "./passport.js";
 import passport from "passport";
+import errorHandler from "../middlewares/errors/index.js";
 
 // Constantes
 const PORT = process.env.PORT;
@@ -50,5 +51,6 @@ app.use(
 initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(errorHandler);
 
 export const io = new Server(server);

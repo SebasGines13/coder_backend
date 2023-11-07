@@ -3,9 +3,8 @@ import { generateToken } from "../utils/jwt.js";
 const postSession = async (req, res) => {
   try {
     if (!req.user) {
-      return res.status(401).send({ mensaje: "Invalidate user" });
+      return res.status(401).send({ mensaje: `Password invalido` });
     }
-
     req.session.user = {
       first_name: req.user.first_name,
       last_name: req.user.last_name,
@@ -17,8 +16,8 @@ const postSession = async (req, res) => {
       maxAge: 43200000,
     });
     res.status(200).send({ payload: req.user });
-  } catch (error) {
-    res.status(500).send({ mensaje: `Error al iniciar sesion ${error}` });
+  } catch (err) {
+    res.status(500).send({ mensaje: `Error al iniciar sesion ${err}` });
   }
 };
 

@@ -1,18 +1,20 @@
-import local from "passport-local"; //Estrategia
-import passport from "passport"; //Manejador de las estrategias
+import "dotenv/config";
+import local from "passport-local";
+import passport from "passport";
 import GithubStrategy from "passport-github2";
 import jwt from "passport-jwt";
 import { createHash, validatePassword } from "../utils/bcrypt.js";
 import userModel from "../models/users.models.js";
 
-//Defino la estrategia a utilizar
 const LocalStrategy = local.Strategy;
 const JWTStrategy = jwt.Strategy;
-const ExtractJWT = jwt.ExtractJwt; //Extractor de los headers de la consulta
+const ExtractJWT = jwt.ExtractJwt;
 
 const initializePassport = () => {
   const cookieExtractor = (req) => {
+    console.log(req.cookies);
     const token = req.cookies ? req.cookies.jwtCookie : {};
+    console.log(token);
     return token;
   };
 
@@ -20,32 +22,31 @@ const initializePassport = () => {
     "jwt",
     new JWTStrategy(
       {
-        jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]), //Consulto el token de las cookies
+        jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
         secretOrKey: process.env.JWT_SECRET,
       },
       async (jwt_payload, done) => {
         try {
-          return done(null, jwt_payload); //Retorno el contenido del token
-        } catch (error) {
-          return done(error);
+          return done(null, jwt_payload);
+        } catch (err) {
+          return done(err);
         }
       }
     )
   );
 
-  //done es como si fuera un res.status(), el callback de respuesta
   passport.use(
     "register",
     new LocalStrategy(
-      { passReqToCallback: true, usernameField: "email" },
+      {
+        passReqToCallback: true,
+        usernameField: "email",
+      },
       async (req, username, password, done) => {
-        //Defino como voy a registrar un user
         const { first_name, last_name, email, age } = req.body;
-
         try {
           const user = await userModel.findOne({ email: email });
           if (user) {
-            //done es como si fuera un return de un callback
             return done(null, false);
           }
           const passwordHash = createHash(password);
@@ -56,33 +57,10 @@ const initializePassport = () => {
             age: age,
             password: passwordHash,
           });
+          console.log(userCreated);
           return done(null, userCreated);
-        } catch (error) {
-          return done(error);
-        }
-      }
-    )
-  );
-
-  passport.use(
-    "login",
-    new LocalStrategy(
-      { usernameField: "email" },
-      async (username, password, done) => {
-        try {
-          const user = await userModel.findOne({ email: username });
-
-          if (!user) {
-            return done(null, false);
-          }
-
-          if (validatePassword(password, user.password)) {
-            return done(null, user); //Usuario y contraseña validos
-          }
-
-          return done(null, false); //Contraseña no valida
-        } catch (error) {
-          return done(error);
+        } catch (err) {
+          return done(err);
         }
       }
     )
@@ -104,26 +82,47 @@ const initializePassport = () => {
               first_name: profile._json.name,
               last_name: " ",
               email: profile._json.email,
-              age: 18, //Edad por defecto,
+              age: 18,
               password: "password",
             });
             done(null, userCreated);
           } else {
             done(null, user);
           }
-        } catch (error) {
-          done(error);
+        } catch (err) {
+          done(err);
         }
       }
     )
   );
 
-  //Inicializar la session del usr
+  passport.use(
+    "login",
+    new LocalStrategy(
+      { usernameField: "email" },
+      async (username, password, done) => {
+        try {
+          const user = await userModel.findOne({ email: username });
+          if (!user) {
+            return done(null, false);
+          }
+
+          if (validatePassword(password, user.password)) {
+            return done(null, user);
+          }
+
+          return done(null, false);
+        } catch (err) {
+          return done(err);
+        }
+      }
+    )
+  );
+
   passport.serializeUser((user, done) => {
     done(null, user._id);
   });
 
-  //Eliminar la session del usr
   passport.deserializeUser(async (id, done) => {
     const user = await userModel.findById(id);
     done(null, user);

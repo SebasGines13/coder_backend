@@ -24,5 +24,10 @@ routerProd.delete(
   authorization("admin"),
   productsController.deleteProduct
 );
+routerProd.get(
+  "/mockingproducts/:cantProducts",
+  passportError("jwt"),
+  productsController.getMockingProducts
+);
 
 export default routerProd;
