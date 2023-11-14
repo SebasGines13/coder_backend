@@ -7,10 +7,11 @@ import messageModel from "./models/messages.models.js";
 import { app, io } from "./config/config.js";
 import usersRouter from "./routes/users.routes.js";
 import router from "./routes/index.routes.js";
+import logger from "./utils/logger.js";
 
 // Conexion de Socket.io
 io.on("connection", (socket) => {
-  console.log("Conexión con socket.io");
+  logger.info("Conexión con socket.io");
   socket.on("addProduct", async (prod) => {
     await productModel.addProduct(prod);
     const products = await productModel.find();

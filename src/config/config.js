@@ -10,6 +10,7 @@ import { engine } from "express-handlebars";
 import initializePassport from "./passport.js";
 import passport from "passport";
 import errorHandler from "../middlewares/errors/index.js";
+import logger from "../utils/logger.js";
 
 // Constantes
 const PORT = process.env.PORT;
@@ -21,13 +22,13 @@ export const app = express();
 mongoose
   .connect(process.env.MONGO_URL)
   .then(async () => {
-    console.log("DB conectada");
+    logger.info("DB conectada");
   })
-  .catch((error) => console.log("Error en conexión a MongoDB Atlas: ", error));
+  .catch((error) => logger.error("Error en conexión a MongoDB Atlas: ", error));
 
 // Server
 const server = app.listen(PORT, () => {
-  console.log(`Server on port ${PORT}`);
+  logger.info(`Server on port ${PORT}`);
 });
 
 // Middlewares

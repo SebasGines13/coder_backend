@@ -160,7 +160,6 @@ const purchaseCart = async (req, res) => {
           purchaseItems.push(product.title);
         }
       });
-      console.log(purchaseItems);
       await cartModel.findByIdAndUpdate(cid, { products: [] }); // Limpio el carrito
       res.redirect(`${REDIRECTPURCHASE}?amount=${amount}&email=${email}`); // Creo el ticket
     } else {
