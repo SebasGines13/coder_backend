@@ -1,0 +1,6 @@
+{"level":"error","message":"Error al enviar email de recuperacion: ReferenceError: UserModel is not defined","timestamp":"2023-11-23T00:13:40.071Z"}
+{"level":"error","message":"Error al enviar email de recuperacion: ReferenceError: UserModel is not defined","timestamp":"2023-11-23T00:14:10.213Z"}
+{"level":"error","message":"Error al actualizar la password: ReferenceError: token is not defined","timestamp":"2023-11-23T00:15:05.278Z"}
+{"level":"error","message":"Error al actualizar la password: ReferenceError: token is not defined","timestamp":"2023-11-23T00:15:11.763Z"}
+{"level":"error","message":"Error al actualizar la password: ReferenceError: token is not defined","timestamp":"2023-11-23T00:16:25.306Z"}
+{"level":"error","message":"La nueva contraseña no puede estar vacía","timestamp":"2023-11-23T00:18:08.287Z"}

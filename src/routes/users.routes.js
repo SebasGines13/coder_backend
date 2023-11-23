@@ -1,4 +1,5 @@
 import { Router } from "express";
+import usersController from "../controllers/users.controller.js";
 
 const routerUser = Router();
 
@@ -18,5 +19,8 @@ routerUser.get("/" + LOGIN, async (req, res) => {
     rutaJS: LOGIN,
   });
 });
+
+routerUser.post("/password-recovery", usersController.passwordRecovery);
+routerUser.post("/reset-password/:token", usersController.passwordReset);
 
 export default routerUser;

@@ -55,7 +55,6 @@ const initializePassport = () => {
             age: age,
             password: passwordHash,
           });
-          console.log(userCreated);
           return done(null, userCreated);
         } catch (err) {
           return done(err);

@@ -154,6 +154,12 @@ const purchaseCart = async (req, res) => {
           (prod) => prod._id == item.id_prod.toString()
         );
         if (product.stock >= item.quantity) {
+          // Calculo descuento del 20% si es que es un usuario premium
+          if (user.rol === "premium") {
+            amount += price * quantity * 0.8;
+          } else {
+            amount += price * quantity;
+          }
           amount += product.price * item.quantity;
           product.stock -= item.quantity;
           await product.save();
