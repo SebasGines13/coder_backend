@@ -1,0 +1,215 @@
+paths:
+  /api/products:
+    get:
+      summary: Obtener lista de productos
+      tags:
+        - Products
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            description: Número máximo de productos a devolver
+        - in: query
+          name: page
+          schema:
+            type: integer
+            description: Número de página
+        - in: query
+          name: sort
+          schema:
+            type: string
+            enum: ["asc", "desc"]
+            description: Orden de clasificación ('asc' o 'desc')
+        - in: query
+          name: filter
+          schema:
+            type: string
+            description: Filtro para la búsqueda de productos
+      responses:
+        "200":
+          description: Lista de productos obtenida exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: "#/components/schemas/Product"
+        "404":
+          description: Productos no encontrados
+        "500":
+          description: Error interno del servidor al obtener productos
+    post:
+      summary: Crear un nuevo producto
+      tags:
+        - Products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+                - description
+                - code
+                - price
+                - stock
+                - category
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                code:
+                  type: string
+                price:
+                  type: number
+                stock:
+                  type: integer
+                category:
+                  type: string
+      responses:
+        "201":
+          description: Producto creado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Product"
+        "400":
+          description: Campos requeridos faltantes
+        "500":
+          description: Error interno del servidor al crear producto
+  /api/products/{pid}:
+    get:
+      summary: Obtener detalles de un producto
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: pid
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Detalles del producto obtenidos exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Product"
+        "404":
+          description: Producto no encontrado
+        "500":
+          description: Error interno del servidor al obtener producto
+    put:
+      summary: Actualizar un producto existente
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: pid
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                code:
+                  type: string
+                price:
+                  type: number
+                stock:
+                  type: integer
+                category:
+                  type: string
+      responses:
+        "200":
+          description: Producto actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Product"
+        "404":
+          description: Producto no encontrado
+        "500":
+          description: Error interno del servidor al actualizar producto
+    delete:
+      summary: Eliminar un producto existente
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: pid
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Producto eliminado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Product"
+        "404":
+          description: Producto no encontrado
+        "500":
+          description: Error interno del servidor al eliminar producto
+  /api/products/mockingproducts/{cantProducts}:
+    get:
+      summary: Obtener productos de prueba generados automáticamente
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: cantProducts
+          required: true
+          schema:
+            type: integer
+            description: Cantidad de productos a generar
+      responses:
+        "200":
+          description: Productos generados automáticamente obtenidos exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+        "404":
+          description: Productos no encontrados
+        "500":
+          description: Error interno del servidor al obtener productos generados automáticamente
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        stock:
+          type: number
+        category:
+          type: string
+        status:
+          type: boolean
+        code:
+          type: string
+        thumbnails:
+          type: array
+          items:
+            type: string

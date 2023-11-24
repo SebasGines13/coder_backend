@@ -26,7 +26,6 @@ routerProd.delete(
 );
 routerProd.get(
   "/mockingproducts/:cantProducts",
-  passportError("jwt"),
   productsController.getMockingProducts
 );
 

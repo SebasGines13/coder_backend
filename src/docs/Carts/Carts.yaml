@@ -1,0 +1,191 @@
+paths:
+  /api/carts/{cid}:
+    get:
+      summary: Obtener detalles de un carrito
+      tags:
+        - Carts
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Productos en el carrito
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Cart"
+        "404":
+          description: Carrito no existente
+    delete:
+      summary: Vaciar el carrito
+      tags:
+        - Carts
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Carrito vaciado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Cart"
+        "404":
+          description: Carrito no existente
+  /api/carts:
+    post:
+      summary: Crear un nuevo carrito
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Carrito creado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Cart"
+        "400":
+          description: Error al crear carrito
+  /api/carts/{cid}/products/{pid}:
+    put:
+      summary: Agregar un producto al carrito
+      tags:
+        - Carts
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: pid
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: integer
+      responses:
+        "200":
+          description: Producto agregado al carrito
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Cart"
+        "404":
+          description: Carrito no existente
+    delete:
+      summary: Eliminar un producto del carrito
+      tags:
+        - Carts
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: pid
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Producto eliminado del carrito
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Cart"
+        "404":
+          description: Producto o carrito no existente
+  /api/carts/{cid}/products:
+    put:
+      summary: Agregar varios productos al carrito
+      tags:
+        - Carts
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                products:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id_prod:
+                        type: string
+                      quantity:
+                        type: integer
+      responses:
+        "200":
+          description: Productos agregados al carrito
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Cart"
+        "404":
+          description: Carrito no existente
+
+  /api/carts/{cid}/purchase:
+    post:
+      summary: Realizar compra desde el carrito
+      tags:
+        - Carts
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          schema:
+            type: string
+      responses:
+        "302":
+          description: Redireccionar a la página de compra
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Cart"
+        "404":
+          description: Carrito no existente
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id_prod:
+          type: string
+        quantity:
+          type: integer
+    Cart:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            $ref: "#/components/schemas/Product"

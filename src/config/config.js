@@ -11,9 +11,10 @@ import initializePassport from "./passport.js";
 import passport from "passport";
 import errorHandler from "../middlewares/errors/index.js";
 import logger from "../utils/logger.js";
+import swaggerJSDoc from "swagger-jsdoc";
 
 // Constantes
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 8080;
 
 // App
 export const app = express();
@@ -53,5 +54,22 @@ initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(errorHandler);
+
+// Config Swagger
+const swaggerOptions = {
+  definition: {
+    openapi: "3.1.0",
+    info: {
+      title: "Documentación del curso de BackEnd",
+      description: "API Coderhouse BackEnd",
+    },
+  },
+  apis: [`${__dirname}/docs/**/*.yaml`],
+};
+
+// ** significa cualquier subcarpeta
+// *  significa cualquier nombre de archivo
+
+export const specs = swaggerJSDoc(swaggerOptions);
 
 export const io = new Server(server);

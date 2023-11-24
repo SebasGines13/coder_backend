@@ -8,6 +8,8 @@ import { app, io } from "./config/config.js";
 import usersRouter from "./routes/users.routes.js";
 import router from "./routes/index.routes.js";
 import logger from "./utils/logger.js";
+import swaggerJSDoc from "swagger-jsdoc";
+import SwaggerUiOptions from "swagger-ui-express";
 
 // Conexion de Socket.io
 io.on("connection", (socket) => {
