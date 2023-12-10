@@ -12,6 +12,7 @@ import passport from "passport";
 import errorHandler from "../middlewares/errors/index.js";
 import logger from "../utils/logger.js";
 import swaggerJSDoc from "swagger-jsdoc";
+import cookieParser from "cookie-parser";
 
 // Constantes
 const PORT = process.env.PORT || 8080;
@@ -35,6 +36,7 @@ const server = app.listen(PORT, () => {
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); //URL extensas
+app.use(cookieParser(process.env.JWT_SECRET));
 app.engine("handlebars", engine()); //Defino que voy a trabajar con hbs y guardo la config
 app.set("view engine", "handlebars");
 app.set("views", path.resolve(__dirname, "./views"));

@@ -2,13 +2,12 @@ import "dotenv/config";
 import local from "passport-local";
 import passport from "passport";
 import GithubStrategy from "passport-github2";
-import jwt from "passport-jwt";
+import jwt, { ExtractJwt } from "passport-jwt";
 import { createHash, validatePassword } from "../utils/bcrypt.js";
 import userModel from "../models/users.models.js";
 
 const LocalStrategy = local.Strategy;
 const JWTStrategy = jwt.Strategy;
-const ExtractJWT = jwt.ExtractJwt;
 
 const initializePassport = () => {
   const cookieExtractor = (req) => {
@@ -20,7 +19,7 @@ const initializePassport = () => {
     "jwt",
     new JWTStrategy(
       {
-        jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
+        jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
         secretOrKey: process.env.JWT_SECRET,
       },
       async (jwt_payload, done) => {
