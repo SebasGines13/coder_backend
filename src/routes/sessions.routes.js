@@ -1,6 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
-import { passportError } from "../utils/messageErrors.js";
+import { authorization, passportError } from "../utils/messageErrors.js";
 import sessionController from "../controllers/sessions.controller.js";
 
 const routerSession = Router();

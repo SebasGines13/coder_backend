@@ -4,3 +4,4 @@
 {"level":"error","message":"Error al actualizar la password: ReferenceError: token is not defined","timestamp":"2023-11-23T00:15:11.763Z"}
 {"level":"error","message":"Error al actualizar la password: ReferenceError: token is not defined","timestamp":"2023-11-23T00:16:25.306Z"}
 {"level":"error","message":"La nueva contraseña no puede estar vacía","timestamp":"2023-11-23T00:18:08.287Z"}
+{"level":"error","message":"La nueva password debe ser distinta a la anterior","timestamp":"2023-12-10T17:22:34.863Z"}

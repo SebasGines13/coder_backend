@@ -15,33 +15,24 @@ await mongoose
   .catch((error) => logger.error("Error en conexion con MongoDB: ", error));
 
 describe("Testing Aplicacion", () => {
-  describe("Test de usuarios", () => {
-    it("Test endpoint /api/users/register, se espera que registre un nuevo usuario", async function () {
-      const newUser = {
-        first_name: "Nombre test",
-        last_name: "Apellido test",
-        email: "test@test",
-        password: "1234ABdca12",
-        age: 33,
+  describe("Test de sessions", () => {
+    it("Test endpoint /api/sessions/login, se espera que loguee al nuevo usuario", async function () {
+      const loggedUser = {
+        email: "sebastian.gines@gmail.com",
+        password: "Coderhouses",
       };
       const { ok, _body } = await requester
-        .post("/api/users/register")
-        .send(newUser); //requester.método('contenido o no')
+        .post("/api/sessions/login")
+        .send(loggedUser);
       logger.info(ok);
       logger.info(JSON.stringify(_body));
     });
-    it("Test endpoint /, se espera que loguee al nuevo usuario", async function () {
-      const loggedUser = {
-        email: "test@test",
-        password: "1234ABdca12",
-      };
-
-      const { ok, _body } = await requester.post("/").send(loggedUser); //requester.método('contenido o no')
-      logger.info(ok);
+    it("Test endpoint /api/sessions/current, se espera que muestre los datos del usuario logueado actualmente", async function () {
+      const { _body } = await requester.get("/api/sessions/current");
       logger.info(JSON.stringify(_body));
     });
-    it("Test endpoint /current, se espera que muestre los datos del usuario logueado actualmente", async function () {
-      const { _body } = await requester.get("/current");
+    it("Test endpoint /api/sessions/logout, se espera que muestre los datos del usuario logueado actualmente", async function () {
+      const { _body } = await requester.get("/api/sessions/logout");
       logger.info(JSON.stringify(_body));
     });
   });

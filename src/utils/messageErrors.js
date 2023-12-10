@@ -7,9 +7,9 @@ export const passportError = (strategy) => {
         return next(error);
       }
       if (!user) {
-        return res
-          .status(401)
-          .send({ error: info.messages ? info.messages : info.toString() });
+        return res.status(401).send({
+          error: info.messages ? info.messages : info.toString(),
+        });
       }
       req.user = user;
       next();

@@ -29,7 +29,7 @@ describe("Testing Aplicacion de Ecommerce", () => {
       };
       const { ok, _body } = await requester
         .post("/api/users/register")
-        .send(newUser); //requester.método('contenido o no')
+        .send(newUser);
       logger.info(ok);
       logger.info(JSON.stringify(_body));
       idCart = _body.cart;
@@ -52,7 +52,7 @@ describe("Testing Aplicacion de Ecommerce", () => {
 
       const { ok, _body } = await requester
         .post("/api/products")
-        .send(newProduct); //requester.método('contenido o no')
+        .send(newProduct);
       logger.info(ok);
       logger.info(JSON.stringify(_body));
       idProduct = _body._id;

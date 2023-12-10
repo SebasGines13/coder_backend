@@ -15,6 +15,7 @@ const postSession = async (req, res) => {
     res.cookie("jwtCookie", token, {
       maxAge: 43200000,
     });
+    console.log(token);
     res.status(200).send({ payload: req.user });
   } catch (err) {
     res.status(500).send({ mensaje: `Error al iniciar sesion ${err}` });
@@ -22,7 +23,7 @@ const postSession = async (req, res) => {
 };
 
 const getCurrentSession = async (req, res) => {
-  res.send(req.user);
+  res.status(200).send({ mensaje: req.user });
 };
 
 const getGithubCreateUser = async (req, res) => {
