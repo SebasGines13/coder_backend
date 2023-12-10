@@ -77,7 +77,7 @@ const postProduct = async (req, res) => {
     }
   } catch (error) {
     if (error.code == 11000) {
-      res.status(400).send({ error: `Llave duplicada` });
+      return res.status(400).send({ error: `Llave duplicada` });
     }
 
     return res
