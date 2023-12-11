@@ -9,19 +9,19 @@ routerProd.get("/:pid", productsController.getProduct);
 routerProd.post(
   "/",
   passportError("jwt"),
-  authorization("admin"),
+  authorization(["user", "admin"]),
   productsController.postProduct
 );
 routerProd.put(
   "/:pid",
   passportError("jwt"),
-  authorization("admin"),
+  authorization(["user", "admin"]),
   productsController.putProduct
 );
 routerProd.delete(
   "/:pid",
   passportError("jwt"),
-  authorization("admin"),
+  authorization(["user", "admin"]),
   productsController.deleteProduct
 );
 routerProd.get(
