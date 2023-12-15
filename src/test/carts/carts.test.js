@@ -29,9 +29,13 @@ describe("Testing Aplicacion de Ecommerce", () => {
         const response = await requester
           .post("/api/sessions/login")
           .send(loggedUser);
+
         authToken = response.headers["set-cookie"][0]
           .split(";")[0]
           .split("=")[1]; // Almacena el token para usarlo en las pruebas
+
+        expect(authToken).to.be.ok; // compruebo la existencia del token
+        expect(response.status).to.be.equal(200); // consulto si la respuesta de la petición es igual a 200
       } catch (error) {
         logger.error("Error en la solicitud de inicio de sesión: ", error);
         throw error;

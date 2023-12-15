@@ -1,6 +1,6 @@
 import productModel from "../models/products.models.js";
 import { generateProduct } from "../utils/utils.js";
-import CustomError from "../services/errors/CustomError.js";
+import { CustomError } from "../services/errors/CustomError.js";
 import EErrors from "../services/errors/Enum.js";
 import { generateProductErrorInfo } from "../services/errors/Info.js";
 
