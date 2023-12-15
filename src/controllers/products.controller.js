@@ -1,8 +1,8 @@
 import productModel from "../models/products.models.js";
 import { generateProduct } from "../utils/utils.js";
-import { CustomError } from "../services/errors/CustomError.js";
 import EErrors from "../services/errors/Enum.js";
 import { generateProductErrorInfo } from "../services/errors/Info.js";
+import logger from "../utils/logger.js";
 
 const getProducts = async (req, res) => {
   const { limit, page, sort, filter } = req.query;
@@ -47,19 +47,7 @@ const postProduct = async (req, res) => {
   const { title, description, code, price, stock, category } = req.body;
 
   if (!title || !description || !code || !price || !stock || !category) {
-    CustomError.createError({
-      name: "Product creation error",
-      cause: generateProductErrorInfo({
-        title,
-        description,
-        code,
-        price,
-        stock,
-        category,
-      }),
-      message: "Error trying to create Product",
-      code: EErrors.MISSING_REQUIRED_FIELDS,
-    });
+    logger.error("Error trying to create Product");
   }
 
   try {
