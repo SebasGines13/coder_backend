@@ -1,7 +1,5 @@
 import productModel from "../models/products.models.js";
 import { generateProduct } from "../utils/utils.js";
-import EErrors from "../services/errors/Enum.js";
-import { generateProductErrorInfo } from "../services/errors/Info.js";
 import logger from "../utils/logger.js";
 
 const getProducts = async (req, res) => {
