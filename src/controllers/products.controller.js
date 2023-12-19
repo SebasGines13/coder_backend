@@ -1,7 +1,7 @@
 import productModel from "../models/products.models.js";
 import { generateProduct } from "../utils/utils.js";
 import CustomError from "../services/errors/customError.js";
-import { eerrors } from "../services/errors/enum.js";
+import { EErrors } from "../services/errors/enum.js";
 import { generateProductErrorInfo } from "../services/errors/Info.js";
 
 const getProducts = async (req, res) => {
@@ -58,7 +58,7 @@ const postProduct = async (req, res) => {
         category,
       }),
       message: "Error trying to create Product",
-      code: eerrors.MISSING_REQUIRED_FIELDS,
+      code: EErrors.MISSING_REQUIRED_FIELDS,
     });
   }
 
