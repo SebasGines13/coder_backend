@@ -2,7 +2,7 @@ import productModel from "../models/products.models.js";
 import { generateProduct } from "../utils/utils.js";
 import CustomError from "../services/errors/customError.js";
 import EErrors from "../services/errors/enums.js";
-import { generateProductErrorInfo } from "../services/errors/Info.js";
+import { generateProductErrorInfo } from "../services/errors/info.js";
 
 const getProducts = async (req, res) => {
   const { limit, page, sort, filter } = req.query;
