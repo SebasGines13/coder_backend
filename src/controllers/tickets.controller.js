@@ -1,5 +1,6 @@
 import ticketModel from "../models/tickets.models.js";
 import { v4 as uuidv4 } from "uuid";
+import logger from "../utils/logger.js";
 
 const createTicket = async (req, res) => {
   const { amount, email } = req.query;
@@ -14,6 +15,7 @@ const createTicket = async (req, res) => {
       .status(201)
       .send({ response: "Ticket generado con éxito", message: ticket });
   } catch (error) {
+    logger.error(`Error al crear el ticket ${error}`);
     res.status(500).send({ mensaje: `Error al crear el ticket ${error}` });
   }
 };

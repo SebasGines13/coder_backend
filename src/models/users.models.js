@@ -1,5 +1,14 @@
 import { Schema, model } from "mongoose";
 import cartModel from "./carts.models.js";
+import mongoose from "mongoose";
+
+const fileSchema = new mongoose.Schema(
+  {
+    name: String,
+    reference: String,
+  },
+  { _id: false }
+);
 
 const userSchema = new Schema({
   first_name: {
@@ -23,6 +32,7 @@ const userSchema = new Schema({
   rol: {
     type: String,
     default: "user",
+    enum: ["admin", "user", "premium"],
   },
   age: {
     type: Number,
@@ -31,6 +41,11 @@ const userSchema = new Schema({
   cart: {
     type: Schema.Types.ObjectId,
     ref: "carts",
+  },
+  documents: [fileSchema],
+  last_connection: {
+    type: Schema.Types.Date,
+    required: false,
   },
 });
 

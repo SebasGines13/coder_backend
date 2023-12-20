@@ -104,9 +104,33 @@ const passwordReset = async (req, res) => {
   }
 };
 
+const uploadDocuments = async (req, res) => {
+  try {
+    const userId = req.params.uid;
+    const newDocuments = req.files.map((file) => ({
+      name: file.originalname,
+      reference: file.path,
+    }));
+
+    const user = await userModel.findById(userId);
+    user.documents.push(...newDocuments);
+    await user.save();
+    res.status(200).send({
+      resultado: "OK",
+      message: "Documento subido exitosamente",
+    });
+  } catch (error) {
+    logger.error(`Error al subir archivo: ${error}`);
+    return res
+      .status(500)
+      .send({ error: `Archivo subido exitosamente: ${error}` });
+  }
+};
+
 const usersController = {
   passwordRecovery,
   passwordReset,
+  uploadDocuments,
 };
 
 export default usersController;

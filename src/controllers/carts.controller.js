@@ -2,6 +2,7 @@ import cartModel from "../models/carts.models.js";
 import productModel from "../models/products.models.js";
 import userModel from "../models/users.models.js";
 import "dotenv/config";
+import logger from "../utils/logger.js";
 
 const REDIRECTPURCHASE = `http://localhost:${process.env.PORT}/api/tickets`;
 
@@ -13,6 +14,7 @@ const getCart = async (req, res) => {
       ? res.status(200).send(cart.products)
       : res.status(404).send("Carrito no existente");
   } catch (error) {
+    logger.error(`Error al consultar carrito: ${error}`);
     res.status(400).send({ error: `Error al consultar carrito: ${error}` });
   }
 };
@@ -22,6 +24,7 @@ const postCart = async (req, res) => {
     const resultado = await cartModel.create({});
     res.status(200).send(resultado);
   } catch (error) {
+    logger.error(`Error al crear carrito: ${error}`);
     res.status(400).send({ error: `Error al crear carrito: ${error}` });
   }
 };
@@ -37,6 +40,7 @@ const putProductToCart = async (req, res) => {
       res.status(200).send({ resultado: "Ok", mensaje: respuesta });
     }
   } catch (e) {
+    logger.error(`Error al actualizar carrito: ${error}`);
     res.status(400).send({ error: `Error al actualizar carrito: ${error}` });
   }
 };
@@ -58,9 +62,11 @@ const putProductsToCart = async (req, res) => {
       const respuesta = await cart.save();
       res.status(200).send({ resultado: "OK", mensaje: respuesta });
     } else {
+      logger.error("Carrito no existente");
       res.status(404).send({ error: "Carrito no existente" });
     }
   } catch (error) {
+    logger.error(`Error al actualizar carrito: ${error}`);
     res.status(400).send({ error: `Error al actualizar carrito: ${error}` });
   }
 };
@@ -82,12 +88,17 @@ const putQuantity = async (req, res) => {
           mensaje: respuesta,
         });
       } else {
+        logger.error("Producto no existente en el carrito");
         res.status(404).send({ error: "Producto no existente en el carrito" });
       }
     } else {
+      logger.error("Carrito no existente");
       res.status(404).send({ error: "Carrito no existente" });
     }
   } catch (error) {
+    logger.error(
+      `Error al actualizar la cantidad del producto en el carrito: ${error}`
+    );
     res.status(400).send({
       error: `Error al actualizar la cantidad del producto en el carrito: ${error}`,
     });
@@ -98,12 +109,17 @@ const deleteCart = async (req, res) => {
   const { cid } = req.params;
   try {
     const cart = await cartModel.findByIdAndUpdate(cid, { products: [] });
-    cart
-      ? res.status(200).send({ resultado: "OK", mensaje: cart })
-      : res
-          .status(404)
-          .send({ resultado: "Carrito no existente", mensaje: cart });
+    if (!cart) {
+      logger.error("Carrito no existente");
+      res
+        .status(404)
+        .send({ resultado: "Carrito no existente", mensaje: cart });
+    } else {
+      res.status(200).send({ resultado: "OK", mensaje: cart });
+    }
+    return;
   } catch (error) {
+    logger.error(`Error al vaciar el carrito: ${error}`);
     res.status(400).send({ error: `Error al vaciar el carrito: ${error}` });
   }
 };
@@ -123,6 +139,7 @@ const deleteProductFromCart = async (req, res) => {
         await cart.save();
         res.status(200).send({ resultado: "OK", mensaje: deletedProduct });
       } else {
+        logger.error("Producto no existente");
         res
           .status(404)
           .send({ resultado: "Producto no existente", mensaje: cart });
@@ -134,6 +151,7 @@ const deleteProductFromCart = async (req, res) => {
         .send({ resultado: "Carrito no existente", mensaje: cart });
     }
   } catch (error) {
+    logger.error(`Error al eliminar carrito: ${error}`);
     res.status(400).send({ error: `Error al eliminar carrito: ${error}` });
   }
 };
@@ -172,6 +190,7 @@ const purchaseCart = async (req, res) => {
       res.status(404).send({ resultado: "Not Found", message: cart });
     }
   } catch (error) {
+    logger.error(`Error al consultar carrito: ${error}`);
     res.status(400).send({ error: `Error al consultar carrito: ${error}` });
   }
 };

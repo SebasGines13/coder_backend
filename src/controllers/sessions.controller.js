@@ -1,4 +1,5 @@
 import { generateToken } from "../utils/jwt.js";
+import logger from "../utils/logger.js";
 
 const postSession = async (req, res) => {
   try {
@@ -15,8 +16,11 @@ const postSession = async (req, res) => {
     res.cookie("jwtCookie", token, {
       maxAge: 43200000,
     });
+    req.user.last_connection = Date.now();
+    await req.user.save();
     res.status(200).send({ payload: req.user });
   } catch (err) {
+    logger.error(`Error al iniciar sesion ${err}`);
     res.status(500).send({ mensaje: `Error al iniciar sesion ${err}` });
   }
 };
@@ -35,11 +39,17 @@ const getGithubSession = async (req, res) => {
 };
 
 const getLogout = (req, res) => {
-  if (req.session) {
-    req.session.destroy();
-  }
-  res.clearCookie("jwtCookie");
-  res.status(200).send({ resultado: "Login eliminado" });
+  req.session.destroy(async (err) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    if (req.user) {
+      req.user.last_connection = Date.now();
+      await req.user.save();
+    }
+    res.clearCookie("jwtCookie");
+    res.status(200).json({ message: "Sesión cerrada con éxito" });
+  });
 };
 
 const sessionController = {

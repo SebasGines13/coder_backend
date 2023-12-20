@@ -3,6 +3,7 @@ import { generateProduct } from "../utils/utils.js";
 import CustomError from "../services/errors/customError.js";
 import EErrors from "../services/errors/enums.js";
 import { generateProductErrorInfo } from "../services/errors/info.js";
+import logger from "../utils/logger.js";
 
 const getProducts = async (req, res) => {
   const { limit, page, sort, filter } = req.query;
@@ -20,9 +21,10 @@ const getProducts = async (req, res) => {
     if (products) {
       return res.status(200).send(products);
     }
-
+    logger.error("Productos no encontrados");
     res.status(404).send({ error: "Productos no encontrados" });
   } catch (error) {
+    logger.error(`Error en consultar productos ${error}`);
     res.status(500).send({ error: `Error en consultar productos ${error}` });
   }
 };
@@ -36,9 +38,10 @@ const getProduct = async (req, res) => {
     if (product) {
       return res.status(200).send(product);
     }
-
+    logger.error("Producto no encontrado");
     res.status(404).send({ error: "Producto no encontrado" });
   } catch (error) {
+    logger.error(`Error en consultar producto ${error}`);
     res.status(500).send({ error: `Error en consultar producto ${error}` });
   }
 };
@@ -77,9 +80,10 @@ const postProduct = async (req, res) => {
     }
   } catch (error) {
     if (error.code == 11000) {
+      logger.error("Llave duplicada");
       return res.status(400).send({ error: `Llave duplicada` });
     }
-
+    logger.error(`Error en consultar producto ${error}`);
     return res
       .status(500)
       .send({ error: `Error en consultar producto ${error}` });
@@ -103,9 +107,10 @@ const putProduct = async (req, res) => {
     if (product) {
       return res.status(200).send(product);
     }
-
+    logger.error("Producto no encontrado");
     res.status(404).send({ error: "Producto no encontrado" });
   } catch (error) {
+    logger.error(`Error en actualizar producto ${error}`);
     res.status(500).send({ error: `Error en actualizar producto ${error}` });
   }
 };
@@ -118,9 +123,10 @@ const deleteProduct = async (req, res) => {
     if (product) {
       return res.status(200).send(product);
     }
-
+    logger.error("Producto no encontrado");
     res.status(404).send({ error: "Producto no encontrado" });
   } catch (error) {
+    logger.error(`Error en actualizar producto ${error}`);
     res.status(500).send({ error: `Error en actualizar producto ${error}` });
   }
 };
@@ -136,8 +142,10 @@ const getMockingProducts = async (req, res) => {
     if (products.length > 0) {
       return res.status(200).send(products);
     }
+    logger.error("Productos no encontrados");
     res.status(404).send({ error: "Productos no encontrados" });
   } catch (error) {
+    logger.error(`Error en consultar productos ${error}`);
     res.status(500).send({ error: `Error en consultar productos ${error}` });
   }
 };
