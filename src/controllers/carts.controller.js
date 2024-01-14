@@ -3,6 +3,7 @@ import productModel from "../models/products.models.js";
 import userModel from "../models/users.models.js";
 import "dotenv/config";
 import logger from "../utils/logger.js";
+import { sendPurchase } from "../config/nodemailer.js";
 
 const REDIRECTPURCHASE = `http://localhost:${process.env.PORT}/api/tickets`;
 
@@ -40,8 +41,8 @@ const putProductToCart = async (req, res) => {
       res.status(200).send({ resultado: "Ok", mensaje: respuesta });
     }
   } catch (e) {
-    logger.error(`Error al actualizar carrito: ${error}`);
-    res.status(400).send({ error: `Error al actualizar carrito: ${error}` });
+    logger.error(`Error al actualizar carrito: ${e}`);
+    res.status(400).send({ error: `Error al actualizar carrito: ${e}` });
   }
 };
 
@@ -169,21 +170,22 @@ const purchaseCart = async (req, res) => {
       const purchaseItems = [];
       cart.products.forEach(async (item) => {
         const product = products.find(
-          (prod) => prod._id == item.id_prod.toString()
+          (prod) => prod._id == item.id_prod._id.toString()
         );
+
         if (product.stock >= item.quantity) {
           // Calculo descuento del 20% si es que es un usuario premium
           if (user.rol === "premium") {
-            amount += price * quantity * 0.8;
+            amount += product.price * item.quantity * 0.8;
           } else {
-            amount += price * quantity;
+            amount += product.price * item.quantity;
           }
-          amount += product.price * item.quantity;
           product.stock -= item.quantity;
           await product.save();
           purchaseItems.push(product.title);
         }
       });
+      await sendPurchase(email, amount, cart.products);
       await cartModel.findByIdAndUpdate(cid, { products: [] }); // Limpio el carrito
       res.redirect(`${REDIRECTPURCHASE}?amount=${amount}&email=${email}`); // Creo el ticket
     } else {

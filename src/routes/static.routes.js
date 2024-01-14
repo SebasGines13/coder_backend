@@ -5,8 +5,18 @@ const HOME = "home";
 const SOCKETGETPRODUCTS = "realTimeProducts";
 const SOCKETADDPRODUCT = "newProduct";
 const CHAT = "chat";
+const PRODUCTS = "products";
+const LOGIN = "login";
+const REGISTER = "register";
 
 const staticRouter = Router();
+
+staticRouter.post("/" + REGISTER, async (req, res) => {
+  res.render(REGISTER, {
+    rutaCSS: REGISTER,
+    rutaJS: REGISTER,
+  });
+});
 
 staticRouter.get("/" + HOME, async (req, res) => {
   const productos = await productModel.find();
@@ -40,6 +50,22 @@ staticRouter.get("/" + CHAT, (req, res) => {
   res.render(CHAT, {
     rutaCSS: CHAT,
     rutaJS: CHAT,
+  });
+});
+
+staticRouter.get("/" + PRODUCTS, async (req, res) => {
+  res.render(PRODUCTS, {
+    rutaCSS: PRODUCTS,
+    rutaJS: PRODUCTS,
+    user: req.session.user,
+  });
+});
+
+staticRouter.get("/" + LOGIN, async (req, res) => {
+  res.render(LOGIN, {
+    rutaCSS: LOGIN,
+    rutaJS: LOGIN,
+    user: req.session.user,
   });
 });
 

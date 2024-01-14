@@ -30,6 +30,7 @@ routerUser.get("/" + LOGIN, async (req, res) => {
   res.render(LOGIN, {
     rutaCSS: LOGIN,
     rutaJS: LOGIN,
+    user: req.session.user,
   });
 });
 
@@ -40,5 +41,8 @@ routerUser.post(
   upload.array("documents"),
   usersController.uploadDocuments
 );
+
+routerUser.get("/", usersController.getAllUsers);
+routerUser.delete("/", usersController.deleteInactiveUsers);
 
 export default routerUser;

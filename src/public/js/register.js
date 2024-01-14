@@ -22,7 +22,7 @@ form.addEventListener("submit", (e) => {
           showConfirmButton: false,
         })
         .then(function () {
-          window.location.replace("/static/home");
+          window.location.replace("/static/products");
         });
     } else {
       swal.fire({

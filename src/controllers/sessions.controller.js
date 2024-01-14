@@ -11,6 +11,8 @@ const postSession = async (req, res) => {
       last_name: req.user.last_name,
       age: req.user.age,
       email: req.user.email,
+      role: req.user.role,
+      cart: req.user.cart,
     };
     const token = generateToken(req.user);
     res.cookie("jwtCookie", token, {
@@ -18,10 +20,30 @@ const postSession = async (req, res) => {
     });
     req.user.last_connection = Date.now();
     await req.user.save();
-    res.status(200).send({ payload: req.user });
+    res.status(200).send({ payload: req.session.user });
   } catch (err) {
     logger.error(`Error al iniciar sesion ${err}`);
     res.status(500).send({ mensaje: `Error al iniciar sesion ${err}` });
+  }
+};
+
+const postRegister = async (req, res) => {
+  try {
+    if (!req.user) {
+      res.status(401).send({ error: `Error al registrar usuario` });
+    }
+    req.session.user = {
+      first_name: req.user.first_name,
+      last_name: req.user.last_name,
+      age: req.user.age,
+      email: req.user.email,
+      role: req.user.role,
+      cart: req.user.cart,
+    };
+    res.status(200).send({ payload: req.user });
+  } catch (error) {
+    logger.error(`Error al registrar usuario: ${error}`);
+    res.status(500).send({ mensaje: `Error al registrar usuario ${error}` });
   }
 };
 
@@ -34,8 +56,15 @@ const getGithubCreateUser = async (req, res) => {
 };
 
 const getGithubSession = async (req, res) => {
-  req.session.user = req.user;
-  res.status(200).send({ mensaje: "Session creada" });
+  req.session.user = {
+    first_name: req.user.first_name,
+    last_name: req.user.last_name,
+    age: req.user.age,
+    email: req.user.email,
+    role: req.user.role,
+    cart: req.user.cart,
+  };
+  res.redirect("/static/products");
 };
 
 const getLogout = (req, res) => {
@@ -53,6 +82,7 @@ const getLogout = (req, res) => {
 };
 
 const sessionController = {
+  postRegister,
   postSession,
   getCurrentSession,
   getGithubCreateUser,

@@ -9,14 +9,23 @@ const getProducts = async (req, res) => {
   const { limit, page, sort, filter } = req.query;
 
   const pag = page ? page : 1;
-  const lim = limit ? limit : 10;
-  const ord = sort === "asc" ? 1 : 0;
+  const lim = limit ? limit : 6;
+  const ord = sort === "asc" ? 1 : -1; // Cambié 0 a -1 para orden descendente
 
   try {
-    const products = await productModel.paginate(
-      { filter: filter },
-      { limit: lim, page: pag, sort: { price: ord } }
-    );
+    const query = filter
+      ? {
+          $or: [
+            { title: { $regex: new RegExp(filter, "i") } },
+            { description: { $regex: new RegExp(filter, "i") } },
+          ],
+        }
+      : {};
+    const products = await productModel.paginate(query, {
+      limit: lim,
+      page: pag,
+      sort: { price: ord },
+    });
 
     if (products) {
       return res.status(200).send(products);
@@ -61,7 +70,7 @@ const postProduct = async (req, res) => {
         category,
       }),
       message: "Error trying to create Product",
-      code: EErrors.MISSING_REQUIRED_FIELDS,
+      code: EErrors.MISSING_REQUIRED_FIELDS.INVALID_TYPES_ERROR,
     });
   }
 

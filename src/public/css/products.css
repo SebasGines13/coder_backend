@@ -1,0 +1,78 @@
+body {
+  margin: 0;
+  padding: 20px;
+  background-color: lightcyan;
+}
+
+.container {
+  max-width: 1200px; /* Ajusta según sea necesario */
+  margin: 20px auto;
+}
+
+.carousel-container {
+  overflow: hidden;
+  padding: 20px;
+}
+
+.carousel {
+  display: flex;
+  flex-wrap: wrap; /* Permite el envoltorio de tarjetas en varias líneas */
+  transition: transform 0.5s ease-in-out;
+}
+
+.card {
+  flex: 0 0 calc(33.33% - 10px); /* 3 tarjetas por fila con un espacio de 10px entre ellas */
+  margin-right: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: scale(
+    1.015
+  ); /* Aumenta el tamaño al 105% del tamaño original al pasar el mouse */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Añade una sombra leve */
+}
+
+.card img {
+  width: 100%;
+  height: 120px; /* Altura fija para las imágenes */
+  object-fit: cover;
+}
+
+.cart {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+/* Estilos para la barra de búsqueda */
+.search-container {
+  margin-bottom: 20px;
+}
+
+#searchBtn {
+  cursor: pointer;
+}
+
+#searchInput {
+  padding: 12px; /* Ajusta el relleno del campo */
+  width: 400px; /* Ajusta la anchura del campo */
+  height: 40px; /* Ajusta la altura del campo */
+  margin-right: 10px;
+}
+
+#total {
+  font-weight: bold;
+  color: #007bff; /* Color primario de Bootstrap */
+  font-size: 25px; /* Tamaño de fuente personalizado */
+}
+
+#cart {
+  font-weight: bold;
+  font-size: 15px; /* Tamaño de fuente personalizado */
+}

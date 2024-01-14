@@ -1,6 +1,10 @@
-import { sendRecoveryEmail } from "../config/nodemailer.js";
+import {
+  sendRecoveryEmail,
+  sendInactiveUserDeletion,
+} from "../config/nodemailer.js";
 import crypto from "crypto";
 import userModel from "../models/users.models.js";
+import cartModel from "../models/carts.models.js";
 import logger from "../utils/logger.js";
 import { createHash, validatePassword } from "../utils/bcrypt.js";
 
@@ -127,10 +131,85 @@ const uploadDocuments = async (req, res) => {
   }
 };
 
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await userModel.find();
+    logger.info("Get de todos los usuarios");
+    return res.status(200).send({
+      resultado: "OK",
+      message: users,
+    });
+  } catch (error) {
+    logger.error(`Error al obtener usuarios: ${error}`);
+    return res
+      .status(500)
+      .send({ error: `Error al obtener usuarios: ${error}` });
+  }
+};
+
+const deleteInactiveUsers = async (req, res) => {
+  try {
+    const deleteDate = new Date();
+    deleteDate.setDate(
+      deleteDate.getDate() - process.env.DELETE_INACT_USERS_DAYS
+    );
+    const usersToDelete = await userModel.find({
+      last_connection: { $lt: deleteDate },
+    });
+
+    if (usersToDelete.length === 0) {
+      logger.info("No se encontraron usuarios inactivos a eliminar");
+      return res
+        .status(400)
+        .send({ error: "No se encontraron usuarios inactivos a eliminar" });
+    }
+
+    for (const user of usersToDelete) {
+      try {
+        await deleteUser(user);
+      } catch (error) {
+        logger.error(`Error al eliminar usuarios por inactividad : ${error}`);
+        return res.status(500).send({
+          error: `Error al eliminar usuarios por inactividad : ${error}`,
+        });
+        return; // Detiene la iteración en caso de error
+      }
+    }
+
+    logger.info(`Se han eliminado ${usersToDelete.length} por inactividad`);
+    return res.status(200).send({
+      resultado: "OK",
+      message: "Usuarios eliminados por inactividad correctamente",
+    });
+  } catch (error) {
+    logger.error(`Error al eliminar usuarios por inactividad : ${error}`);
+    return res
+      .status(500)
+      .send({ error: `Error al eliminar usuarios por inactividad : ${error}` });
+  }
+};
+
+const deleteUser = async (user) => {
+  const { _id, email, cart } = user;
+  try {
+    await sendInactiveUserDeletion(email);
+    await userModel.findByIdAndDelete(_id);
+    await cartModel.findByIdAndDelete(cart);
+    logger.info(`Usuario ${_id} eliminado por inactividad`);
+  } catch (error) {
+    logger.error(`Error al eliminar usuarios por inactividad : ${error}`);
+    return res
+      .status(500)
+      .send({ error: `Error al eliminar usuarios por inactividad : ${error}` });
+  }
+};
+
 const usersController = {
   passwordRecovery,
   passwordReset,
   uploadDocuments,
+  getAllUsers,
+  deleteInactiveUsers,
 };
 
 export default usersController;
